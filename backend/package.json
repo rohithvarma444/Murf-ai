@@ -1,0 +1,52 @@
+{
+  "name": "lyra-backend",
+  "version": "1.0.0",
+  "description": "Backend API for Lyra AI chatbot platform",
+  "main": "src/index.js",
+  "scripts": {
+    "dev": "nodemon src/index.js",
+    "start": "node src/index.js",
+    "setup": "node setup-env.js",
+    "test:embeddings": "node test-embeddings.js",
+    "test:prisma": "node test-prisma.js",
+    "test:pdf": "node test-pdf-processing.js",
+    "db:generate": "prisma generate",
+    "db:push": "prisma db push",
+    "db:migrate": "prisma migrate dev",
+    "db:studio": "prisma studio",
+    "db:seed": "node src/seed.js"
+  },
+  "dependencies": {
+    "@google-cloud/speech": "^7.1.0",
+    "@google/generative-ai": "^0.2.1",
+    "@langchain/google-genai": "^0.2.14",
+    "@prisma/client": "^5.7.1",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "express-rate-limit": "^7.1.5",
+    "helmet": "^7.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "langchain": "^0.0.130",
+    "multer": "^1.4.5-lts.1",
+    "pdf-parse": "^1.1.1",
+    "pg": "^8.11.3",
+    "socket.io": "^4.8.1",
+    "ws": "^8.18.3",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2",
+    "prisma": "^5.7.1"
+  },
+  "keywords": [
+    "api",
+    "chatbot",
+    "ai",
+    "prisma",
+    "postgresql"
+  ],
+  "author": "Your Name",
+  "license": "MIT"
+}

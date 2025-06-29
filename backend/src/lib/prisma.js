@@ -1,0 +1,18 @@
+const { PrismaClient } = require('@prisma/client');
+
+// Create a singleton instance
+const prisma = new PrismaClient({
+  log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
+});
+
+// Handle graceful shutdown
+process.on('beforeExit', async () => {
+  await prisma.$disconnect();
+});
+
+process.on('SIGINT', async () => {
+  await prisma.$disconnect();
+  process.exit(0);
+});
+
+module.exports = prisma; 

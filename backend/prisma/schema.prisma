@@ -1,0 +1,87 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String    @id @default(cuid())
+  email     String    @unique
+  password  String
+  name      String
+  company   String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  projects  Project[]
+
+  @@map("users")
+}
+
+model Project {
+  id           String        @id @default(cuid())
+  name         String
+  description  String?
+  publicUrl    String        @unique @default(cuid())
+  isActive     Boolean       @default(true)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  userId       String
+  chatSessions ChatSession[]
+  documents    Document[]
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("projects")
+}
+
+model Document {
+  id         String      @id @default(cuid())
+  filename   String
+  fileSize   Int
+  content    String
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  projectId  String
+  project    Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  embeddings Embedding[]
+
+  @@map("documents")
+}
+
+model Embedding {
+  id         String   @id @default(cuid())
+  chunk      String
+  embedding  Json
+  metadata   Json?
+  createdAt  DateTime @default(now())
+  documentId String
+  document   Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+
+  @@map("embeddings")
+}
+
+model ChatSession {
+  id        String        @id @default(cuid())
+  language  String        @default("en")
+  startedAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+  projectId String
+  messages  ChatMessage[]
+  project   Project       @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@map("chat_sessions")
+}
+
+model ChatMessage {
+  id          String      @id @default(cuid())
+  userMessage String
+  aiResponse  String
+  language    String      @default("en")
+  timestamp   DateTime    @default(now())
+  sessionId   String
+  session     ChatSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@map("chat_messages")
+}
